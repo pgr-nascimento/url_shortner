@@ -14,4 +14,13 @@ defmodule UrlShortnerWeb.UrlControllerTest do
 
     assert html_response(conn, 200) =~ "localhost:4000/#{slug}"
   end
+
+  test "Redirect to the original URL", %{conn: conn} do
+    slug = "xkcd327"
+    Repo.insert(%Url{original_url: "https://google.com", slug: slug})
+
+    conn = get(conn, Routes.url_path(conn, :show, slug))
+
+    assert redirected_to(conn) == "https://google.com"
+  end
 end
