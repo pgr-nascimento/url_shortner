@@ -1,6 +1,0 @@
-<section class="row">
-  <%= form_for @conn, Routes.url_path(@conn, :create), [method: :post], fn f -> %>
-    <%= text_input f, :original_url, placeholder: "Shorten your URL" %>
-    <%= submit "Shorten" %>
-  <% end %>
-</section>

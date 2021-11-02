@@ -16,7 +16,7 @@ defmodule UrlShortnerWeb.Router do
   scope "/", UrlShortnerWeb do
     pipe_through :browser
 
-    get "/", HomeController, :index
+    get "/", UrlController, :index
     post "/url", UrlController, :create
   end
 
