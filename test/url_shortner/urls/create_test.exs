@@ -14,6 +14,14 @@ defmodule UrlShortner.Urls.CreateTest do
       assert slug =~ ~r/\w{6}/
     end
 
+    test "with invalid params, it returns an erro" do
+      params = %{"original_url" => "www.google.com"}
+      expected_error = %{original_url: ["is not valid"]}
+
+      assert {:error, url} = UrlCreator.call(params)
+      assert expected_error == errors_on(url)
+    end
+
     test "when already exists the same slug on database, it returns an error" do
       Repo.insert(%Url{original_url: "https://www.google.com", slug: "xkcd327"})
 
