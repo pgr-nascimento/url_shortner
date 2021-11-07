@@ -23,4 +23,17 @@ defmodule UrlShortnerWeb.UrlControllerTest do
 
     assert redirected_to(conn) == "https://google.com"
   end
+
+  test "when the shorten url is not found, it renders to not found template", %{conn: conn} do
+    slug = "xkcd327"
+
+    response =
+      conn
+      |> get(Routes.url_path(conn, :show, slug))
+      |> html_response(:not_found)
+
+    expected_response = "Sorry, we can't find the original URL."
+
+    assert String.contains?(response, expected_response)
+  end
 end

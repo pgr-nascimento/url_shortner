@@ -16,6 +16,13 @@ defmodule UrlShortnerWeb.UrlController do
   def show(conn, %{"slug" => slug}) do
     url = UrlShortner.Repo.get_by(UrlShortner.Url, slug: slug)
 
-    redirect(conn, external: url.original_url)
+    if url do
+      redirect(conn, external: url.original_url)
+    else
+      conn
+      |> put_status(:not_found)
+      |> put_view(UrlShortnerWeb.ErrorView)
+      |> render("404.html")
+    end
   end
 end
