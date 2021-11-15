@@ -7,7 +7,7 @@ defmodule UrlShortner do
   if it comes from the database, an external API or others.
   """
 
-  alias UrlShortner.Urls.Create, as: UrlCreator
+  alias UrlShortner.Urls.Handler, as: UrlHandler
 
-  defdelegate shorten_url(params), to: UrlCreator, as: :call
+  defdelegate shorten_url(params), to: UrlHandler, as: :create
 end
