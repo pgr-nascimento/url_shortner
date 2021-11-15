@@ -6,11 +6,8 @@ defmodule UrlShortnerWeb.UrlController do
   end
 
   def create(conn, params) do
-    {:ok, url} = UrlShortner.shorten_url(params)
-
-    conn
-    |> put_flash(:info, "Created with sucess")
-    |> render("index.html", %{url: url})
+    UrlShortner.shorten_url(params)
+    |> handle_response(conn)
   end
 
   def show(conn, %{"slug" => slug}) do
@@ -24,5 +21,17 @@ defmodule UrlShortnerWeb.UrlController do
       |> put_view(UrlShortnerWeb.ErrorView)
       |> render("404.html")
     end
+  end
+
+  defp handle_response({:ok, url}, conn) do
+    conn
+    |> put_flash(:info, "Created with success")
+    |> render("index.html", %{url: url})
+  end
+
+  defp handle_response({:error, _changeset}, conn) do
+    conn
+    |> put_flash(:error, "Oops, we couldn't shorten the URL, check it and try again.")
+    |> render("index.html", %{url: nil})
   end
 end
