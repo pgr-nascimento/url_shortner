@@ -2,7 +2,7 @@ defmodule UrlShortner.Url do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @url_regex ~r/^(http|https):\/\/(www.)?\w+\.[\w\/?=%+&.-]+/
+  @url_regex ~r/^(http|https):\/\/(www.)?\w+\.[\w\/?=#%+&.-]+/
 
   schema "urls" do
     field :original_url, :string
