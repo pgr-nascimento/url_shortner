@@ -58,4 +58,27 @@ defmodule UrlShortner.UrlTest do
       assert expected_response == errors_on(response)
     end
   end
+
+  describe "by_ids/1" do
+    test "when the arg is an integer list, returns the Urls founded by the ids" do
+      %Url{id: id} = Repo.insert!(%Url{original_url: "www.google.com", slug: "xkcd137"})
+      %Url{id: second_id} = Repo.insert!(%Url{original_url: "www.xkcd.com", slug: "gKas123"})
+      %Url{id: third_id} = Repo.insert!(%Url{original_url: "www.google.com", slug: "KJax129"})
+
+      assert [%Url{id: ^id}, %Url{id: ^second_id}, %Url{id: ^third_id}] =
+               Url.by_ids([id, second_id, third_id])
+    end
+
+    test "when the arg is nil, returns an empty list" do
+      ids = nil
+
+      assert Url.by_ids(ids) == []
+    end
+
+    test "when the args is an empty list, returns an empty list" do
+      ids = []
+
+      assert Url.by_ids(ids) == []
+    end
+  end
 end

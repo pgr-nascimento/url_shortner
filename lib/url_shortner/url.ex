@@ -1,6 +1,10 @@
 defmodule UrlShortner.Url do
+  alias UrlShortner.Repo
+
   use Ecto.Schema
   import Ecto.Changeset
+
+  import Ecto.Query
 
   @url_regex ~r/^(http|https):\/\/(www.)?\w+\.[\w\/?=#%+&.-]+/
 
@@ -18,6 +22,13 @@ defmodule UrlShortner.Url do
     |> validate_required([:original_url, :slug])
     |> validate_url()
     |> unique_constraint(:slug)
+  end
+
+  def by_ids(nil), do: []
+  def by_ids([]), do: []
+
+  def by_ids(ids) do
+    Repo.all(from u in UrlShortner.Url, where: u.id in ^ids)
   end
 
   defp validate_url(changeset) do
