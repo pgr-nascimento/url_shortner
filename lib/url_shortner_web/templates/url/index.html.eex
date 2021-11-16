@@ -5,17 +5,19 @@
         <% end %>
 </section>
 
-<%= if @url do %>
+<%= if @urls do %>
   <section>
     <table>
-      <tr>
-        <td>
-          <%= @url.original_url %>
-        </td>
-        <td>
-          <a href="http://localhost:4000/<%=@url.slug%>">http://localhost:4000/<%= @url.slug %></a>
-        </td>
-      </tr>
+      <%= for url <- @urls do %>
+        <tr>
+          <td>
+            <%= url.original_url %>
+          </td>
+          <td>
+            <a href="http://localhost:4000/<%=url.slug%>">http://localhost:4000/<%= url.slug %></a>
+          </td>
+        </tr>
+        <% end %>
     </table>
   </section>
   <% end %>

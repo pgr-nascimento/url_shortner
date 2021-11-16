@@ -1,8 +1,15 @@
 defmodule UrlShortnerWeb.UrlController do
+  alias UrlShortner.Repo
   use UrlShortnerWeb, :controller
 
+  import Ecto.Query
+
   def index(conn, _params) do
-    render(conn, "index.html", %{url: nil})
+    url_ids = get_session(conn, :urls)
+
+    urls = Repo.all(from u in UrlShortner.Url, where: u.id in ^url_ids)
+
+    render(conn, "index.html", %{urls: urls})
   end
 
   def create(conn, params) do
@@ -23,10 +30,13 @@ defmodule UrlShortnerWeb.UrlController do
     end
   end
 
-  defp handle_response({:ok, url}, conn) do
+  defp handle_response({:ok, %UrlShortner.Url{id: id}}, conn) do
+    ids = [id | get_session(conn, :urls)]
+
     conn
+    |> put_session(:urls, ids)
     |> put_flash(:info, "Created with success")
-    |> render("index.html", %{url: url})
+    |> redirect(to: "/")
   end
 
   defp handle_response({:error, _changeset}, conn) do

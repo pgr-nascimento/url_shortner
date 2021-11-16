@@ -7,12 +7,33 @@ defmodule UrlShortnerWeb.UrlControllerTest do
 
   import Ecto.Query
 
+  test "See a list with all urls created by the user" do
+    {:ok, %{id: first_id}} = Repo.insert(%Url{original_url: "https://xkcd.com", slug: "xkcd327"})
+
+    {:ok, %{id: second_id}} =
+      Repo.insert(%Url{original_url: "https://google.com", slug: "ggle308"})
+
+    response =
+      session_conn()
+      |> put_session(:urls, [first_id, second_id])
+      |> get("/")
+      |> html_response(:ok)
+
+    assert response =~ "https://xkcd.com"
+    assert response =~ "xkcd327"
+    assert response =~ "https://xkcd.com"
+    assert response =~ "ggle308"
+  end
+
   test "Save the URL with an shorten link", %{conn: conn} do
-    conn = post(conn, Routes.url_path(conn, :create), %{original_url: "http://www.google.com.br"})
+    original_url = "http://www.google.com.br"
 
-    %Url{slug: slug} = Repo.one(from url in Url, order_by: [desc: url.id], limit: 1)
+    conn = post(conn, Routes.url_path(conn, :create), %{original_url: original_url})
 
-    assert html_response(conn, 200) =~ "localhost:4000/#{slug}"
+    assert %Url{slug: _slug, original_url: ^original_url} =
+             Repo.one(from url in Url, order_by: [desc: url.id], limit: 1)
+
+    assert redirected_to(conn) == "/"
   end
 
   test "Redirect to the original URL", %{conn: conn} do

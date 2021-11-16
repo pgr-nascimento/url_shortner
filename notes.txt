@@ -1,0 +1,20 @@
+Falar sobre: requisição ajax/channel para melhorar a experiencia (evitar o f5 atualizando)
+colocar o id das Urls criadas na section para recuperar depois e listar as urls criadas pelo usuário
+Separar a parte de retry em outro modulo
+Falar como gerar o encurtador de URL
+Ver o que fazer com o changeset quando da erro
+
+
+Meu maior dilema após ver o projeto tomando forma, era: Como vou fazer com que o usuário veja as urls que ele encurtou
+sem estar logado. Vai ser dificil manter a referencia sem um id para vincular, para criar uma URL, era simples, em vez de
+usar um redirect para o ID da url nova, eu só uso um render que funcionaria. Mas isso faria com que o usuário só iria conseguir
+ver uma URL e teria o problema de apertar F5 e recarregar a página, que na verdade reenviaria o formulário, criando mais uma URL
+e mudando o link curto também. Como eu não sou uma pessoa muito boa de front, minha primeira ideia foi usar Sessions, assim eu posso 
+dar redirect a vontade que eu manteria os ids das urls criada pelo user, de quebra eu consigo fazer com que ele possa criar mais de uma
+e também posso adicionar um limitador por usuário (simples, o usuário poderia quebrar de algumas formas, mas funcionaria). Eu também pensei
+em usar cookies, mas se um usuário poder modificar os cookies, ele pode ser maldoso e alterar o cookie para pegar dados de outros usuários,
+daria para resolver isso se eu criptografasse o dado que eu salvaria no cookie, mas adicionaria duas novas complexidades ao sistema: criptografar,
+descriptografar/validar se o dado é valido. Isso ajudaria a manter o histórico das urls criadas pelo usuário por mais tempo.
+
+dilema dos retries
+falar sobre http/ https antes
