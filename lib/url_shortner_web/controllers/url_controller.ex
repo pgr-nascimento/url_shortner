@@ -1,15 +1,12 @@
 defmodule UrlShortnerWeb.UrlController do
   alias UrlShortner.Repo
+  alias UrlShortner.Url
   use UrlShortnerWeb, :controller
 
-  import Ecto.Query
-
   def index(conn, _params) do
-    url_ids = get_session(conn, :urls)
+    ids = get_session(conn, :urls)
 
-    urls = Repo.all(from u in UrlShortner.Url, where: u.id in ^url_ids)
-
-    render(conn, "index.html", %{urls: urls})
+    render(conn, "index.html", %{urls: Url.by_ids(ids)})
   end
 
   def create(conn, params) do
@@ -18,7 +15,7 @@ defmodule UrlShortnerWeb.UrlController do
   end
 
   def show(conn, %{"slug" => slug}) do
-    url = UrlShortner.Repo.get_by(UrlShortner.Url, slug: slug)
+    url = Repo.get_by(UrlShortner.Url, slug: slug)
 
     if url do
       redirect(conn, external: url.original_url)
@@ -31,7 +28,7 @@ defmodule UrlShortnerWeb.UrlController do
   end
 
   defp handle_response({:ok, %UrlShortner.Url{id: id}}, conn) do
-    ids = [id | get_session(conn, :urls)]
+    ids = [id | get_session(conn, :urls) || []]
 
     conn
     |> put_session(:urls, ids)
@@ -40,8 +37,10 @@ defmodule UrlShortnerWeb.UrlController do
   end
 
   defp handle_response({:error, _changeset}, conn) do
+    ids = get_session(conn, :urls)
+
     conn
     |> put_flash(:error, "Oops, we couldn't shorten the URL, check it and try again.")
-    |> render("index.html", %{url: nil})
+    |> render("index.html", %{urls: Url.by_ids(ids)})
   end
 end
