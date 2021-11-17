@@ -1,20 +1,46 @@
-Falar sobre: requisição ajax/channel para melhorar a experiencia (evitar o f5 atualizando)
-colocar o id das Urls criadas na section para recuperar depois e listar as urls criadas pelo usuário
-Separar a parte de retry em outro modulo
-Falar como gerar o encurtador de URL
-Ver o que fazer com o changeset quando da erro
+## Technical Decisions
+
+### Generate a random slug for each URL
+
+I wondering how to implement the slug generation in two ways, both I needed a string/slug generator, in the first one I just had to gen the slug and
+check if is unique on database. The second one I could generate a lot of keys, store in database and get one "free" (without a URL bounded). When I
+looked for references on Internet, I found this two ways too, but to use the keys stored in database I could need a Key Generator Service and I think it
+would be more complex fot this project. So I opt to use the gen the slug and save it.
+But could happen of the application generates the same slug more than one time, changing the slug collumn to unique solve the problem, but the user 
+couldn't do nothing with the error "Hey the system generates a duplicated slug, try again". So, I opt to create a way to retry with it happen, it is not
+the best code but I believe that fit well for the situation. But the responsabilities are separated, I have a module to generate a slug and other module
+to retry if needed.
+
+After I've finished the implementation, I knew a lib that do exactly it the NanoId lib https://github.com/railsmechanic/nanoid. But I opted to keep my
+solution and let you know that I found another way to implement it.
 
 
-Meu maior dilema após ver o projeto tomando forma, era: Como vou fazer com que o usuário veja as urls que ele encurtou
-sem estar logado. Vai ser dificil manter a referencia sem um id para vincular, para criar uma URL, era simples, em vez de
-usar um redirect para o ID da url nova, eu só uso um render que funcionaria. Mas isso faria com que o usuário só iria conseguir
-ver uma URL e teria o problema de apertar F5 e recarregar a página, que na verdade reenviaria o formulário, criando mais uma URL
-e mudando o link curto também. Como eu não sou uma pessoa muito boa de front, minha primeira ideia foi usar Sessions, assim eu posso 
-dar redirect a vontade que eu manteria os ids das urls criada pelo user, de quebra eu consigo fazer com que ele possa criar mais de uma
-e também posso adicionar um limitador por usuário (simples, o usuário poderia quebrar de algumas formas, mas funcionaria). Eu também pensei
-em usar cookies, mas se um usuário poder modificar os cookies, ele pode ser maldoso e alterar o cookie para pegar dados de outros usuários,
-daria para resolver isso se eu criptografasse o dado que eu salvaria no cookie, mas adicionaria duas novas complexidades ao sistema: criptografar,
-descriptografar/validar se o dado é valido. Isso ajudaria a manter o histórico das urls criadas pelo usuário por mais tempo.
+### Save the IDs in the Session
 
-dilema dos retries
-falar sobre http/ https antes
+After I visited some URL shortners sites, I see one that I liked and use as reference, and I liked because it show for the user more than one URL, so the
+user could short a limited number of URLs instead only one. Thinking about the UX I saw it as good feature to have, and I started wondering how to do it.
+As I won't a good Frontend, I see the possibility to save on the session as a good option for me. And opt to use the session I solve other problem related
+to the user aren't be logged.
+
+### How to show the URL shortned to the user?
+
+Here we have some possibilities:
+* Redirect the user to the URL page (like: localhost:4000/urls/1).
+-> I don't see any site using it, so I prefer not to use too.
+* Keep the user on the same page and just render the template with the URL shortned data.
+-> It was my first decision, but I really didn't like because if the user want to reload the page, would appear a popup to send the form again and if do
+it, they will lose the previous URL data.
+* Create a "fake" user and save the fake user id on the session
+-> Could be a good option, but will add more complexity for the app.
+* Save the ids of the URLs on the session
+-> I believe this is the best option for me (that don't have so much skill with frontend), with it I can redirect the user without problem and keep them
+on the main page, get the ids from the session and find the URLs on the database. With this approach I can show more than one URL shorted by user at the
+same time!
+
+### Other ways to show the URL
+
+There is a bunch of options to do that, I thought in more two ways:
+- Using AJAX requests: this I know how to do, but I never did a AJAX request in a framework like Rails or Phoenix. I will spent a lot of time to do it
+and without a good quality of code, so I skip this option.
+- Using channel, this is a good way I believe, but I never worked with channels and probably I will spent more time to do a good project with channels,
+so I skip this option too, but I put on my subjects to learn about it.
