@@ -12,7 +12,7 @@ config :url_shortner,
 
 # Configures the endpoint
 config :url_shortner, UrlShortnerWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "localhost", port: 4000],
   secret_key_base: "SR+Vw9HLW/4aSGpdiPutY5TU6WxT96kv5heRpCPY+d6YYroBzUcvxsJSeWyu5QJm",
   render_errors: [view: UrlShortnerWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: UrlShortner.PubSub,
