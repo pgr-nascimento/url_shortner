@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  app:
+    build:
+      context: .
+    command: mix phx.app
+    volumes:
+      - .:/app:delegated
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:13.1
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
