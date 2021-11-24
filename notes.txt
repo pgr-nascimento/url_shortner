@@ -2,45 +2,50 @@
 
 ### Generate a random slug for each URL
 
-I wondering how to implement the slug generation in two ways, both I needed a string/slug generator, in the first one I just had to gen the slug and
-check if is unique on database. The second one I could generate a lot of keys, store in database and get one "free" (without a URL bounded). When I
-looked for references on Internet, I found this two ways too, but to use the keys stored in database I could need a Key Generator Service and I think it
-would be more complex fot this project. So I opt to use the gen the slug and save it.
-But could happen of the application generates the same slug more than one time, changing the slug collumn to unique solve the problem, but the user 
-couldn't do nothing with the error "Hey the system generates a duplicated slug, try again". So, I opt to create a way to retry with it happen, it is not
-the best code but I believe that fit well for the situation. But the responsabilities are separated, I have a module to generate a slug and other module
-to retry if needed.
+I wondered how to implement the slug generation in two ways, I needed a string/slug generator, in the first one I just had to gen the slug and
+check if is unique on the database. The second one I could generate a lot of keys, store them in the database and get one "free" (without a URL bounded). When I
+looked for references on Internet, I found these two ways too, but to use the keys stored in the database I could need a Key Generator Service and I think it
+would be more complex for this project. So I opt to use the gen the slug and save it.
+But could happen if the application generates the same slug more than one time, changing the slug column to unique solve the problem, but the user couldn't do anything with the error "Hey the system generates a duplicated slug, try again". So, I opt to create a way to retry with it happen, it is not
+the best code but I believe that fits well for the situation. But the responsibilities are separated, I have a module to generate a slug and another module to retry if needed.
 
-After I've finished the implementation, I knew a lib that do exactly it the NanoId lib https://github.com/railsmechanic/nanoid. But I opted to keep my
+After I've finished the implementation, I knew a lib that does exactly it the NanoId lib https://github.com/railsmechanic/nanoid. But I opted to keep my
 solution and let you know that I found another way to implement it.
 
 
 ### Save the IDs in the Session
 
-After I visited some URL shortners sites, I see one that I liked and use as reference, and I liked because it show for the user more than one URL, so the
-user could short a limited number of URLs instead only one. Thinking about the UX I saw it as good feature to have, and I started wondering how to do it.
-As I won't a good Frontend, I see the possibility to save on the session as a good option for me. And opt to use the session I solve other problem related
+After I visited some URL shorteners sites, I see one that I liked and use as a reference, and I liked it because it show for the user more than one URL, so the
+user could short a limited number of URLs instead of only one. Thinking about the UX I saw it as a good feature to have, and I started wondering how to do it.
+As I'm not a good Frontend, I see the possibility to save on the session as a good option for me. And opt to use the session I solve other problems related
 to the user aren't be logged.
 
-### How to show the URL shortned to the user?
+### How to show the URL shortened to the user?
 
 Here we have some possibilities:
 * Redirect the user to the URL page (like: localhost:4000/urls/1).
 -> I don't see any site using it, so I prefer not to use too.
-* Keep the user on the same page and just render the template with the URL shortned data.
--> It was my first decision, but I really didn't like because if the user want to reload the page, would appear a popup to send the form again and if do
+* Keep the user on the same page and just render the template with the URL shortened data.
+-> It was my first decision, but I didn't like it because if the user wants to reload the page, would appear a popup to send the form again and if do
 it, they will lose the previous URL data.
 * Create a "fake" user and save the fake user id on the session
--> Could be a good option, but will add more complexity for the app.
+-> Could be a good option but will add more complexity for the app.
 * Save the ids of the URLs on the session
--> I believe this is the best option for me (that don't have so much skill with frontend), with it I can redirect the user without problem and keep them
-on the main page, get the ids from the session and find the URLs on the database. With this approach I can show more than one URL shorted by user at the
+-> I believe this is the best option for me (that don't have so much skill with frontend), with I can redirect the user without a problem and keep them
+on the main page, get the ids from the session and find the URLs on the database. With this approach, I can show more than one URL shorted by a user at the
 same time!
 
 ### Other ways to show the URL
 
 There is a bunch of options to do that, I thought in more two ways:
-- Using AJAX requests: this I know how to do, but I never did a AJAX request in a framework like Rails or Phoenix. I will spent a lot of time to do it
+- Using AJAX requests: this I know how to do, but I never did an AJAX request in a framework like Rails or Phoenix. I will spend a lot of time doing it
 and without a good quality of code, so I skip this option.
-- Using channel, this is a good way I believe, but I never worked with channels and probably I will spent more time to do a good project with channels,
+- Using channels, this is a good way I believe, but I never worked with channels and probably I will spend more time doing a good project with channels,
 so I skip this option too, but I put on my subjects to learn about it.
+
+## Possible Features to the future
+
+- Put the HTTP in the beginning of the URL instead return an error
+- Limit the user to not generate a lot of shorted URLs
+- Add stats related to the click of a short URL (total clicks, clicks by device, clicks by browser, by day, etc)
+- Add a button to the customer copy the URL.
