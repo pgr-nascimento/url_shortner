@@ -3,11 +3,11 @@ services:
   app:
     build:
       context: .
-    command: mix phx.app
+    command: mix phx.server
     volumes:
       - .:/app:delegated
     ports:
-      - "4000:4000"
+      - 4000:4000
     depends_on:
       - postgres
   postgres:
