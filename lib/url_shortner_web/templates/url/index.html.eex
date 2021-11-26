@@ -11,7 +11,7 @@
       <%= for url <- @urls do %>
         <tr>
           <td>
-            <%= url.original_url %>
+            <%= format_original_url(url.original_url) %>
           </td>
           <td class="shorten-url">
             <a href="<%=Routes.url_path(@conn, :show, url.slug)%>"><%=build_link_text(url.slug)%></a>
