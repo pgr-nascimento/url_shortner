@@ -13,7 +13,7 @@ defmodule UrlShortnerWeb.UrlViewTest do
 
       result = UrlView.build_link_text(slug)
 
-      assert result == "localhost/#{slug}"
+      assert result == "http://localhost:4000/#{slug}"
     end
   end
 end
