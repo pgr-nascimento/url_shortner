@@ -5,7 +5,7 @@ config :url_shortner, UrlShortner.Repo,
   username: "postgres",
   password: "postgres",
   database: "url_shortner_dev",
-  hostname: "localhost",
+  hostname: "postgres",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -16,6 +16,7 @@ config :url_shortner, UrlShortner.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :url_shortner, UrlShortnerWeb.Endpoint,
+  http: [port: 4000],
   url: [host: "localhost", port: 4000],
   debug_errors: true,
   code_reloader: true,
