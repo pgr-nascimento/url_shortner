@@ -14,22 +14,24 @@ redirects from the shorten URL to the original.
 ## What next?
 
 - I was in doubt if I put my thoughts here or keep them on notes.txt, so, I put some details and nexts steps that I would like to do
-in this file. Please, go there and see my notes :D
-
+in notes.txt file. Please, go there and see my notes :D
 
 ## Setting up the project
 
-*IMPORTANT* Make sure you have installed [Elixir](https://github.com/elixir-lang/elixir), [Phoenix](https://github.com/phoenixframework/phoenix) and
-[Postgres](https://www.postgresql.org/) and [Make](https://www.gnu.org/software/make/)
+**IMPORTANT** Make sure you have [Docker](https://docs.docker.com/engine/install/ubuntu/) and [Docker Compose](https://docs.docker.com/compose/install/) first.
 
-With it installed, please run:
+``` 
+# You may need to install dependencies first
 
-`make setup`
+$ docker-compose run --rm app mix deps.get
 
-## Running the project
+# Setup server database
+$ docker-compose run --rm app mix ecto.setup
 
-`make server`
+# Running client and server application
+$ docker-compose up
+```
 
 ## Running the tests
 
-`make test`
+`$ docker-compose run -e MIX_ENV=test --rm app mix test`
