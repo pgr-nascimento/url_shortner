@@ -49,3 +49,4 @@ so I skip this option too, but I put on my subjects to learn about it.
 - Limit the user to not generate a lot of shorted URLs
 - Add stats related to the click of a short URL (total clicks, clicks by device, clicks by browser, by day, etc)
 - Add a button to the customer copy the URL.
+- Use a good frontend framework to provide a better experience to the user (think about multiple devices, maintainability and good patterns) 
